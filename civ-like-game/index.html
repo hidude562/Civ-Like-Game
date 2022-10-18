@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+			<link href="src/styles.css" rel="styles" />
+    <title>Civ-Like-Game</title>
+    <meta charset="UTF-8" />
+  </head>
+
+	<script> //cool person dev commands
+		const dev = {
+			setEnemy1Location(_enemyXLocation, _enemyYLocation) {
+				enemy1xLocation = _enemy1xLocation; //set enemy 1 x location
+				enemy1yLocation = _enemy1yLocation; //set enemy 1 y location
+			}, setEnemy2Location(_enemyXLocation, _enemyYLocation) {
+				enemy2xLocation = _enemy2xLocation; //set enemy 2 x location
+				enemy2yLocation = _enemy2yLocation; //set enemy 2 y location
+			}, setEnemy3Location(_enemyXLocation, _enemyYLocation) {
+				enemy3xLocation = _enemyXLocation; //set enemy 3 x location
+				enemy3yLocation = _enemyYLocation; // set enemy 3 y location
+			}, checkEnemyLocation(enemy) {
+				//enemy 1
+				if (enemy == 1) {
+					console.log('Enemy 1 X Location: ' + enemy1xLocation); //tell the location
+					console.log('Enemy 1 Y Location: ' + enemy1yLocation); //tell the location
+				}
+				//enemy 2 
+				if (enemy == 2) {
+					console.log('Enemy 2 X Location: ' + enemy2xLocation); //tell the location
+					console.log('Enemy 2 Y Location: ' + enemy2yLocation); //tell the location
+				} 
+				//enemy 3
+				if (enemy == 3) {
+					console.log('Enemy 3 X Location: ' + enemy3xLocation); //tell the location
+					console.log('Enemy 3 Y Location: ' + enemy3yLocation); //tell the location
+				}
+			},  checkEnemyFound(enemy) {
+				//enemy 1
+				if (enemy == 1) {
+						//check if enemy 1 found and log result
+						console.log('Is Enemy 1 Found: ' + enemy1Found);
+				} 
+				//enemy 2
+				if (enemy == 2) {
+						//check if enemy 2 found and log result
+						console.log('Is Enemy 2 Found: ' + enemy2Found);
+				} 
+				//enemy 3
+				if (enemy == 3) {
+						//check if enemy 3 is found and log result
+						console.log('Is Enemy 3 Found: ' + enemy3Found);
+				}
+			}, goToSquare(squareNumX, squareNumY) {
+				xPlayerLocation = squareNumX; //set player x location to input
+				yPlayerLocation = squareNumY; //set player y location to input 
+				console.log('Player moved to: (' + xPlayerLocation + ", " + yPlayerLocation + ")"); //log where the player moved to
+				
+				xgridNumber1 = squareNumX - 1; //set player location center square so subtract 1
+				xgridNumber2 = squareNumX; //middle column set set same as input
+				xgridNumber3 = squareNumX + 1; //right column add 1 since to the right of center column
+
+				ygridNumber1 = squareNumY + 1; //set one extra since above center row
+				ygridNumber2 = squareNumY; //set same as input since center row
+				ygridNumber3 = squareNumY - 1; //set one less since row below center row
+				updateGrid(); //update the grid you idiot
+			}, checkPlayerLocation() {
+				console.log('Player X Location is: ' + xPlayerLocation);
+				console.log('Player Y Location is: ' + yPlayerLocation);
+			},
+		}
+	</script>
+
+  <script>
+    var turnNumber = 0;
+    var happiness = 5;
+    var population = 50;
+    var gold = 10;
+    var food = 250;
+    var resources = 500;
+    var goldenAgeRequirement = 25;
+		var goldenAges = 0;
+		
+    var goldGain = 1;
+    var resourceGain = 5;
+		var foodGain = 5;
+		
+		var xgridNumber1 = 1;
+		var xgridNumber2 = 2;
+		var xgridNumber3 = 3;
+
+		var ygridNumber1 = 1;
+		var ygridNumber2 = 2;
+		var ygridNumber3 = 3;
+
+		var xPlayerLocation = 2;
+		var yPlayerLocation = 2;
+
+		var enemy1xLocation = 0;
+		var enemy1yLocation = 0;
+
+		var enemy2xLocation = 0;
+		var enemy2yLocation = 0;
+
+		var enemy3xLocation = 0;
+		var enemy3yLocation = 0;
+
+		var enemy1Found = false;
+		var enemy2Found = false;
+		var enemy3Found = false;
+
+  </script>
+
+  <body>
+    <div id="app"></div>
+
+    <script>
+      function getRandomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+
+      function startGame() {
+        turnNumber = 0;
+        happiness = 5;
+        population = 50;
+        gold = 10; //no idea why i chose any of these very specific numbers
+        food = 250;
+				resources = 500;
+				
+        goldGain = 1;
+        resourceGain = 5;
+				foodGain = 5;
+
+				xgridNumber1 = 1;
+				xgridNumber2 = 2;
+				xgridNumber3 = 3;
+				
+				ygridNumber1 = 1;
+				ygridNumber2 = 2;
+				ygridNumber3 = 3;
+		
+				xPlayerLocation = 2;
+				yPlayerLocation = 2;
+
+				enemy1xLocation = getRandomInteger(-1000, 1000);
+				enemy1yLocation = getRandomInteger(-1000, 1000);
+
+				enemy2xLocation = getRandomInteger(-1000, 1000);
+				enemy2yLocation = getRandomInteger(-1000, 1000);
+
+				enemy3xLocation = getRandomInteger(-1000, 1000);
+				enemy3yLocation = getRandomInteger(-1000, 1000);
+
+				enemy1Found = false;
+			  enemy2Found = false;
+			  enemy3Found = false;
+
+				uiUpdate(); //update the ui at the end of this stuff
+				updateGrid(); //update the grid at the end of this stuff
+      }
+
+      function statsChange() {
+        var happinessChange = getRandomInteger(0, 2); //random number for change in happiness
+        var populationChange = getRandomInteger(-1, 10); //random number
+        var foodChange = Math.round(population / 5 + 1); //random number for food change, hopefully they starve because they are all pigs
+        var resourceChange = Math.round(population * 0.5 + 5); //random number for resources change per turn
+
+        turnNumber = turnNumber + 1; //add 1 to the turn number
+        happiness = happiness + happinessChange; // chanhe happiness
+        population = population + populationChange; // change population
+        gold = gold + goldGain; //change gold amount
+        food = food + foodChange + foodGain; //change food amount
+        resources = resources + resourceChange + resourceGain; //change resource amount
+
+        if (happiness >= goldenAgeRequirement) { //pointless atm, idk why i added like an idiot, I should probably get that checked out, hopefully looking at this code should remind me to get back onto my meds
+          goldenAges = goldenAges + 1; //increase the amount of golden ages that have been had by one
+          goldenAgeRequirement = goldenAgeRequirement + 25; //increase the amount of happiness needed for a golden age by 25
+          happiness = 0; //make the people depressed 
+        }
+      }
+
+			//update the stats
+      function uiUpdate() {
+        document.getElementById("turnNumber").innerHTML =
+          "Turn Number: " + turnNumber; //update turn number html element
+        document.getElementById("happiness").innerHTML =
+          "Population Happiness: " + happiness + " / " + goldenAgeRequirement; //update the happiness over golden age requirement html element
+        document.getElementById("population").innerHTML =
+          "Population: " + population; //update the population html element
+        document.getElementById("gold").innerHTML = "Gold: " + gold; //update the gold html element
+        document.getElementById("food").innerHTML = "Food: " + food; //update the food html element
+        document.getElementById("resources").innerHTML =
+          "Resources: " + resources; //you get it at this point
+        document.getElementById("goldGain").innerHTML =
+          "Gold Gain per Turn: " + goldGain; //tell gold gain per turn
+        document.getElementById("foodGain").innerHTML =
+          "Food Gain per Turn: " + foodGain; //tell food gain per turn
+        document.getElementById("resourceGain").innerHTML =
+          "Resource Gain per Turn: " + resourceGain; //you get it at this point
+      }
+
+			//function for the next turn
+      function nextTurn() {
+        statsChange(); //roll the random new stats, and change the old stats
+				uiUpdate(); //update the "ui"
+				updateGrid(); //update the grid, called in other stuff but I don't care, just in case.
+			}
+			
+			//function for moving the grid left
+			function moveGridLeft() {
+				xgridNumber1 = xgridNumber1 - 1;
+		 	  xgridNumber2 = xgridNumber2 - 1;
+		 	  xgridNumber3 = xgridNumber3 - 1;
+				xPlayerLocation = xPlayerLocation - 1; //decrease player x location by one (so go left you stupid idiot, you decrease the number by one if you go left on a graph)
+				updateGrid();  //update the grid, its very important to the game
+			}
+
+			//function for moving the grid right
+			function moveGridRight() {
+				xgridNumber1 = xgridNumber1 + 1;
+		 	  xgridNumber2 = xgridNumber2 + 1;
+		 	  xgridNumber3 = xgridNumber3 + 1;
+				xPlayerLocation = xPlayerLocation + 1; //increase player x location by one
+				updateGrid(); //update the grid, its very important to the game
+			}
+
+			//function for moving the grid up
+			function moveGridUp() {
+				ygridNumber1 = ygridNumber1 + 1;
+				ygridNumber2 = ygridNumber2 + 1;
+				ygridNumber3 = ygridNumber3 + 1;
+				yPlayerLocation = yPlayerLocation + 1; //increase the player y location by one
+				updateGrid(); //you get it at this point
+			}
+
+			//function for moving the grid down
+			function moveGridDown() {
+				ygridNumber1 = ygridNumber1 - 1;
+				ygridNumber2 = ygridNumber2 - 1;
+				ygridNumber3 = ygridNumber3 - 1;
+				yPlayerLocation = yPlayerLocation - 1; //decrease the player y location by one
+				updateGrid(); //you get it at this point
+				//i turned the grid into a graph system while listening to east jesus nowhere and i was quite oddly productive during this time compared to the rest of the time
+			}
+
+			//function for checking board for enemies
+			function checkGridEnemy() {
+				if (xPlayerLocation = enemy1xLocation && yPlayerLocation == enemy1yLocation) {
+						enemy1Found = true; //set the cool boolean for enemy1 to be true
+						document.getElementById('civ1').innerHTML = "Opposing Civilization 1: (" + enemy1xLocation + ", " + enemy1yLocation + ")"; //update the html element with the location of the civ
+				} if (xPlayerLocation = enemy2xLocation && yPlayerLocation == enemy2yLocation) {
+						enemy2Found = true; //set the cool boolean for enemy2 to be true
+						document.getElementById('civ2').innerHTML = "Opposing Civilization 2: (" + enemy2xLocation + ", " + enemy2yLocation + ")"; //update the html element with the location of the civ
+				} if (xPlayerLocation = enemy3xLocation && yPlayerLocation == enemy3yLocation) {
+						enemy3Found = true; //set the cool boolean for enemy3 to be true
+						document.getElementById('civ3').innerHTML = "Opposing Civilization 3: (" + enemy3xLocation + ", " + enemy3yLocation + ")"; //update the html element with the location of the civ
+				}
+			}
+
+			//update the grid/gameboard function
+			function updateGrid() {
+				document.getElementById('gridSpot1,3').innerHTML = "(" + xgridNumber1 + ", " + ygridNumber3 + ")"; //update 1, 3 element
+				document.getElementById('gridSpot2,3').innerHTML = "(" + xgridNumber2 + ", " + ygridNumber3 + ")"; //update 2, 3 element
+				document.getElementById('gridSpot3,3').innerHTML = "(" + xgridNumber3 + ", " + ygridNumber3 + ")"; //update 3, 3 element
+				document.getElementById('gridSpot1,2').innerHTML = "(" + xgridNumber1 + ", " + ygridNumber2 + ")"; //update 1, 2 element
+				document.getElementById('gridSpot2,2').innerHTML = "(" + xgridNumber2 + ", " + ygridNumber2 + ")"; //update 2, 2 element
+				document.getElementById('gridSpot3,2').innerHTML = "(" + xgridNumber3 + ", " + ygridNumber2 + ")"; //update 3, 2 element
+				document.getElementById('gridSpot1,1').innerHTML = "(" + xgridNumber1 + ", " + ygridNumber1 + ")"; //update 1, 1 element
+				document.getElementById('gridSpot2,1').innerHTML = "(" + xgridNumber2 + ", " + ygridNumber1 + ")"; //update 2, 1 element
+				document.getElementById('gridSpot3,1').innerHTML = "(" + xgridNumber3 + ", " + ygridNumber1 + ")"; //update 3, 1 element
+		
+				checkGridEnemy(); //check for enemy on grid moved to
+			}
+    </script>
+
+
+		<!--Buttons to start game, or next turn-->
+    <button id="startGame"><a onclick="startGame()">Start Game</a></button>
+    <button id="nextTurn"><a onclick="nextTurn()">Next Turn</a></button>
+
+
+		<!--Main game ui-->
+    <div class="mainUI">
+      <div class="box"><h3 id="turnNumber">Turn Number: 0</h3></div>
+      <div class="box"><h3 id="happiness">Population Happiness:</h3></div>
+      <div class="box"><h3 id="population">Population:</h3></div>
+      <div class="box"><h3 id="gold">Gold:</h3></div>
+      <div class="box"><h3 id="food">Food:</h3></div>
+      <div class="box"><h3 id="resources">Resources:</h3></div>
+      <div class="box"><h3 id="goldGain">Gold Gain per Turn:</h3></div>
+      <div class="box"><h3 id="foodGain">Food Gain per Turn:</h3></div>
+      <div class="box"><h3 id="resourceGain">Resource Gain per Turn:</h3></div>
+		</div>
+		
+
+	<!--Grid displaying images-->
+	<div class="gameBoard">
+		<div class="box1"><img src="./images/GrassSquare.png" alt = "GrassSquare"></img></div>
+		<div class="box2"><img src="./images/GrassSquare.png" alt = "GrassSquare"></img></div>
+		<div class="box3"><img src="./images/GrassSquare.png" alt = "GrassSquare"></img></div>
+		<div class="box4"><img src="./images/GrassSquare.png" alt = "GrassSquare"></img></div>
+		<div class="box5"><img src="./images/GrassSquare.png" alt = "GrassSquare"></img></div>
+		<div class="box6"><img src="./images/GrassSquare.png" alt = "GrassSquare"></img></div>
+		<div class="box7"><img src="./images/GrassSquare.png" alt = "GrassSquare"></img></div>
+		<div class="box8"><img src="./images/GrassSquare.png" alt = "GrassSquare"></img></div>
+		<div class="box9"><img src="./images/GrassSquare.png" alt = "GrassSquare"></img></div>
+	</div>
+	
+
+	<!--Player image, couldn't find a better spot to stick this into the code so it just goes here cause why not-->
+	<div class="player"><img src="./images/Player.png" alt = "player"></img></div>
+
+
+	<!--Numbers on the top left corner of grid squares-->
+	<div class="gridNumbers">
+		<div class="grid1"><h5 id="gridSpot1,3">#</h5></div>
+		<div class="grid2"><h5 id="gridSpot2,3">#</h5></div>
+		<div class="grid3"><h5 id="gridSpot3,3">#</h5></div>
+		<div class="grid4"><h5 id="gridSpot1,2">#</h5></div>
+		<div class="grid5"><h5 id="gridSpot2,2">#</h5></div>
+		<div class="grid6"><h5 id="gridSpot3,2">#</h5></div>
+		<div class="grid7"><h5 id="gridSpot1,1">#</h5></div>
+		<div class="grid8"><h5 id="gridSpot2,1">#</h5></div>
+		<div class="grid9"><h5 id="gridSpot3,1">#</h5></div>
+	</div>	
+
+
+	<!--Buttons to move left, right, up or down-->
+	<div class="moveButtons">
+		<div class="left"><button><a onclick="moveGridLeft()">Move Left </a></button></div>
+		<div class="right"><button><a onclick="moveGridRight()">Move Right </a></button></div>
+		<div class="up"><button><a onclick="moveGridUp()">Move Up </a></button></div>
+		<div class="down"><button><a onclick="moveGridDown()">Move Down </a></button></div>
+	</div>
+
+	<!--Opposing enemy civilization location or found stuff or whatever idk-->
+	<div class="opposingCivs">
+		<div class="civ1"><h5 id="civ1">Opposing Civilization 1: NOT FOUND </h5></div>
+		<div class="civ2"><h5 id="civ2">Opposing Civilization 2: NOT FOUND </h5></div>
+		<div class="civ3"><h5 id="civ3">Opposing Civilization 3: NOT FOUND </h5></div>
+	</div>
+
+  </body>
+</html>

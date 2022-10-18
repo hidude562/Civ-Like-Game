@@ -1,0 +1,46 @@
+body {
+  font-family: sans-serif;
+}
+
+.mainUI {
+  position: absolute;
+  left: 0px;
+  display: block;
+}
+
+.gameBoard {
+  position: absolute;
+  display: grid;
+  grid-template-rows: 100px 100px 100px;
+  grid-template-columns: 100px 100px 100px;
+  top: 450px;
+}
+
+.gridNumbers {
+  position: absolute;
+  display: grid;
+  grid-template-rows: 100px 100px 100px;
+  grid-template-columns: 100px 100px 100px;
+  top: 440px;
+  left: 20px;
+}
+
+.opposingCivs {
+  position: absolute;
+  left: 500px;
+}
+
+.moveButtons {
+  position: absolute;
+  top: 560px;
+  left: 350px;
+  display: grid;
+  grid-template-rows: 35px;
+  grid-template-columns: 50px 50px;
+}
+
+.player {
+  position: absolute;
+  top: 580px;
+  left: 135px;
+}
