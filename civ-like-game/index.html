@@ -243,13 +243,13 @@
 
 			//function for checking board for enemies
 			function checkGridEnemy() {
-				if (xPlayerLocation = enemy1xLocation && yPlayerLocation == enemy1yLocation) {
+				if (xPlayerLocation == enemy1xLocation && yPlayerLocation == enemy1yLocation) {
 						enemy1Found = true; //set the cool boolean for enemy1 to be true
 						document.getElementById('civ1').innerHTML = "Opposing Civilization 1: (" + enemy1xLocation + ", " + enemy1yLocation + ")"; //update the html element with the location of the civ
-				} if (xPlayerLocation = enemy2xLocation && yPlayerLocation == enemy2yLocation) {
+				} if (xPlayerLocation == enemy2xLocation && yPlayerLocation == enemy2yLocation) {
 						enemy2Found = true; //set the cool boolean for enemy2 to be true
 						document.getElementById('civ2').innerHTML = "Opposing Civilization 2: (" + enemy2xLocation + ", " + enemy2yLocation + ")"; //update the html element with the location of the civ
-				} if (xPlayerLocation = enemy3xLocation && yPlayerLocation == enemy3yLocation) {
+				} if (xPlayerLocation == enemy3xLocation && yPlayerLocation == enemy3yLocation) {
 						enemy3Found = true; //set the cool boolean for enemy3 to be true
 						document.getElementById('civ3').innerHTML = "Opposing Civilization 3: (" + enemy3xLocation + ", " + enemy3yLocation + ")"; //update the html element with the location of the civ
 				}
